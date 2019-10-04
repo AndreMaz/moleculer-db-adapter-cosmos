@@ -140,7 +140,7 @@ class CosmosDbAdapter {
       const readResponse = await this.container.item(_id).read();
 
       if (readResponse.statusCode >= 400) {
-        throw new Error(`Resource with ${_id} not found`);
+        throw new Error(`Resource with id "${_id}" not found`);
       }
 
       return readResponse.resource;
@@ -295,12 +295,12 @@ class CosmosDbAdapter {
       const readResponse = await this.container.item(_id).read();
 
       if (readResponse.statusCode >= 400) {
-        throw new Error(`Resource with ${_id} not found`);
+        throw new Error(`Resource with id "${_id}" not found`);
       }
 
       const delResponse = await this.container.item(_id).delete();
       if (delResponse.statusCode >= 400) {
-        throw new Error(`Resource with ${_id} not found`);
+        throw new Error(`Resource with id "${_id}" not found`);
       }
 
       return readResponse.resource;

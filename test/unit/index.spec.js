@@ -145,7 +145,7 @@ describe("Test CosmosStoreAdapter", () => {
     return adapter.findById(id).catch(err => {
       // console.log(err);
       expect(err).toBeInstanceOf(Error);
-      expect(err.message).toBe(`Resource with ${id} not found`);
+      expect(err.message).toBe(`Resource with id "${id}" not found`);
     });
   });
 
@@ -160,7 +160,7 @@ describe("Test CosmosStoreAdapter", () => {
     const id = "wrong-id";
     return adapter.removeById(id).catch(err => {
       expect(err).toBeInstanceOf(Error);
-      expect(err.message).toBe(`Resource with ${id} not found`);
+      expect(err.message).toBe(`Resource with id "${id}" not found`);
     });
   });
 

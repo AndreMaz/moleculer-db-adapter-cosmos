@@ -10,7 +10,7 @@ describe("Test With Moleculer DB", () => {
   let cosmosMock;
 
   const connection = {
-    endpoint: `https://localhost:3000`,
+    endpoint: `https://localhost:3001`,
     key: "dummy key",
     agent: https.Agent({ rejectUnauthorized: false })
   };
@@ -34,8 +34,8 @@ describe("Test With Moleculer DB", () => {
 
   beforeAll(() => {
     return new Promise((resolve, reject) => {
-      cosmosMock = cosmosServer().listen(3000, () => {
-        console.log(`Cosmos DB server running at https://localhost:3000`);
+      cosmosMock = cosmosServer().listen(3001, () => {
+        console.log(`Cosmos DB server running at https://localhost:3001`);
         resolve();
       });
     });
