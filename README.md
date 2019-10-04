@@ -14,6 +14,82 @@ $ npm install moleculer-db moleculer-db-adapter-cosmos --save
 
 ## Usage
 
+```js
+const { ServiceBroker } = require("moleculer");
+const DbService = require("moleculer-db");
+const CosmosDbAdapter = require("moleculer-db-adapter-cosmos");
+
+// Mock CosmosDB server
+const { default: cosmosServer } = require("@zeit/cosmosdb-server");
+const https = require("https");
+
+const connection = {
+  endpoint: `https://localhost:3000`, // URL to your Cosmos DB
+  key: "dummy key", // Put your password
+  // Create new Agent with disabled SSL verification
+  // since the server uses self-signed certificate
+  agent: https.Agent({ rejectUnauthorized: false }) // For test purposes only. Remove this when working with an actual DB
+};
+
+const dbName = "sample_database";
+const containerName = "sample_collection";
+
+// Create broker
+let broker = new ServiceBroker({
+  logger: console,
+  logLevel: "debug"
+});
+
+// Create a service
+broker.createService({
+  name: "store",
+  // Load DB methods and action handlers
+  mixins: [DbService],
+  // Create a Cosmos DB adapter
+  adapter: new CosmosDbAdapter(connection, dbName, containerName),
+
+  async afterConnected() {
+    this.broker.logger.info("Connection Established");
+  }
+});
+
+// Start mock CosmosDB server
+cosmosServer().listen(3000, () => {
+  // Start the broker
+  broker.start().then(async () => {
+    const documentDefinition = {
+      id: "hello world doc",
+      content: "Hello World!"
+    };
+
+    // Insert an Item
+    let item = await broker.call("store.create", documentDefinition);
+
+    broker.logger.info(`Item Created`);
+    broker.logger.info(item);
+
+    // Find all items in BD
+    let result = await broker.call("store.find");
+    broker.logger.info(`Items in DB`);
+    broker.logger.info(result);
+
+    // Count the items
+    let count = await broker.call("store.count");
+    broker.logger.info(`Number of Items in DB`);
+    broker.logger.info(count);
+
+    // Remove by ID
+    broker.logger.info(`Removing an Item`);
+    await broker.call("store.remove", { id: documentDefinition.id });
+
+    // Count again
+    count = await broker.call("store.count");
+    broker.logger.info(`Number of Items in DB`);
+    broker.logger.info(count);
+  });
+});
+```
+
 # Test
 
 ```
@@ -32,6 +108,4 @@ The project is available under the [MIT license](https://tldrlegal.com/license/m
 
 # Contact
 
-Copyright (c) 2016-2018 MoleculerJS
-
-[![@moleculerjs](https://img.shields.io/badge/github-moleculerjs-green.svg)](https://github.com/moleculerjs) [![@MoleculerJS](https://img.shields.io/badge/twitter-MoleculerJS-blue.svg)](https://twitter.com/MoleculerJS)
+Copyright (c) 2019 André Mazayev

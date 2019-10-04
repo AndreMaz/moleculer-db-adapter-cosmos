@@ -2,11 +2,10 @@
 
 const { ServiceBroker } = require("moleculer");
 const DbService = require("moleculer-db");
-
 const CosmosDbAdapter = require("../../index");
 
-const https = require("https");
 const { default: cosmosServer } = require("@zeit/cosmosdb-server");
+const https = require("https");
 
 const connection = {
   endpoint: `https://localhost:3000`,
@@ -25,10 +24,10 @@ let broker = new ServiceBroker({
 });
 
 // Load my service
-broker.createService(DbService, {
+broker.createService({
   name: "store",
+  mixins: [DbService],
   adapter: new CosmosDbAdapter(connection, dbName, containerName),
-  settings: {},
 
   async afterConnected() {
     this.broker.logger.info("Connection Established");
