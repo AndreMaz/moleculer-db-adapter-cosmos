@@ -92,13 +92,13 @@ cosmosServer().listen(3000, () => {
 
 # Test
 
-```
+```bash
 $ npm test
 ```
 
 In development with watching
 
-```
+```bash
 $ npm run ci
 ```
 

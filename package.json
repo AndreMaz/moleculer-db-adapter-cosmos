@@ -1,5 +1,5 @@
 {
-  "name": "moleculer-db-cosmos",
+  "name": "moleculer-db-adapter-cosmos",
   "version": "0.0.1",
   "description": "Azure CosmosDB SQL native adapter for Moleculer DB service.",
   "main": "index.js",
