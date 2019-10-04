@@ -1,13 +1,22 @@
 "use strict";
 
-let { ServiceBroker } = require("moleculer");
-let StoreService = require("../../../moleculer-db/index");
+const { ServiceBroker } = require("moleculer");
+const DbService = require("moleculer-db");
 
-let CosmosDbAdapter = require("../../index");
-const connectOpt = require("../../../../../connectOpt");
+const CosmosDbAdapter = require("../../index");
 
-const dbName = "sample database";
-const containerName = "sample collection";
+const https = require("https");
+const { default: cosmosServer } = require("@zeit/cosmosdb-server");
+
+const connection = {
+  endpoint: `https://localhost:3000`,
+  key: "dummy key",
+  // disable SSL verification
+  // since the server uses self-signed certificate
+  agent: https.Agent({ rejectUnauthorized: false })
+};
+const dbName = "sample_database";
+const containerName = "sample_collection";
 
 // Create broker
 let broker = new ServiceBroker({
@@ -16,68 +25,48 @@ let broker = new ServiceBroker({
 });
 
 // Load my service
-broker.createService(StoreService, {
-  name: "posts",
-  adapter: new CosmosDbAdapter(connectOpt, dbName, containerName),
+broker.createService(DbService, {
+  name: "store",
+  adapter: new CosmosDbAdapter(connection, dbName, containerName),
   settings: {},
 
   async afterConnected() {
-    // console.log(this.adapter);
-    /*
-		let insertResponse = await this.adapter.insert({
-			test: "moleculer-cosmos-adapter-test"
-		});
-		console.log(insertResponse);
-		*/
-    let result = await this.adapter.find();
-    // console.log(res);
-    // let idList = ["5b774410-0141-4964-8178-f4deb38cea08", "f13847a7-ff51-4be6-b782-a596b7af6ca5"]
-    // this.adapter.findByIds(idList);
-
-    /*
-		let entries = ["f13847a7-ff51-4be6-b782-a596b7af6ca5"];
-
-		let result = await this.adapter.clear(entries);
-		*/
-    console.log(result);
+    this.broker.logger.info("Connection Established");
   }
 });
 
-broker.start().then(async () => {
-  try {
-    /*let result = await broker.call("posts.create", {
-			test: "called from Moleculer broker"
-		});*/
-    // let result = await broker.call("posts.find");
-    /*
-		let result = await broker.call("posts.remove", {
-			id: "ecb8eaac-e867-4601-8950-91fba7731e68"
-		});
-		*/
-    // console.log(result);
-    /*
-		let idList = [
-			"5b774410-0141-4964-8178-f4deb38cea08",
-			"f13847a7-ff51-4be6-b782-a596b7af6ca5"
-		];
+// Start mock CosmosDB server
+cosmosServer().listen(3000, () => {
+  // Start the broker
+  broker.start().then(async () => {
+    const documentDefinition = {
+      id: "hello world doc",
+      content: "Hello World!"
+    };
 
-		let result = await broker.call("posts.count");
-		console.log(result);
-		*/
-    /*
-		let entities = [{ a: "Hello 1" }, { b: "Hello 2" }];
-		let result = await broker.call("posts.insert", { entities: entities });
-		console.log(result);
-		*/
-    /*
-		let params = {
-			id: "f908e7b4-bd1f-4767-8c06-821f822bb346",
-			b: "Hello UPDATED HANDLER"
-		};
-		let result = await broker.call("posts.update", params);
-		console.log(result);
-		*/
-  } catch (error) {
-    console.log(error);
-  }
+    // Insert an Item
+    let item = await broker.call("store.create", documentDefinition);
+
+    broker.logger.info(`Item Created`);
+    broker.logger.info(item);
+
+    // Find all items in BD
+    let result = await broker.call("store.find");
+    broker.logger.info(`Items in DB`);
+    broker.logger.info(result);
+
+    // Count the items
+    let count = await broker.call("store.count");
+    broker.logger.info(`Number of Items in DB`);
+    broker.logger.info(count);
+
+    // Remove by ID
+    broker.logger.info(`Removing an Item`);
+    await broker.call("store.remove", { id: documentDefinition.id });
+
+    // Count again
+    count = await broker.call("store.count");
+    broker.logger.info(`Number of Items in DB`);
+    broker.logger.info(count);
+  });
 });

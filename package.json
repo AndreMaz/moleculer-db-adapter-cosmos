@@ -25,8 +25,8 @@
     "type": "git",
     "url": "https://github.com/AndreMaz/moleculer-db-adapter-cosmos"
   },
-  "homepage": "https://github.com/moleculerjs/moleculer-db/tree/master/packages/moleculer-db-adapter-cosmos#readme",
-  "author": "MoleculerJS",
+  "homepage": "https://github.com/AndreMaz/moleculer-db-adapter-cosmos#readme",
+  "author": "André Mazayev",
   "license": "MIT",
   "peerDependencies": {
     "moleculer": "^0.12.0 || ^0.13.0 || ^0.14.0"
