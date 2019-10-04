@@ -1,0 +1,60 @@
+{
+  "name": "moleculer-db-cosmos",
+  "version": "0.0.1",
+  "description": "Azure CosmosDB SQL native adapter for Moleculer DB service.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon examples/index.js",
+    "ci": "jest --watch",
+    "test": "jest --coverage",
+    "lint": "prettier --check 'src/**/*.js' 'test/**/*.js'",
+    "lint:fix": "prettier --write 'src/**/*.js' 'test/**/*.js'",
+    "deps": "npm-check -u",
+    "readme": "node node_modules/moleculer-docgen/index.js -t README.md src/index.js",
+    "coverall": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+  },
+  "keywords": [
+    "microservice",
+    "moleculer",
+    "microsoft",
+    "cosmos",
+    "cosmosDB",
+    "@azure/cosmos"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AndreMaz/moleculer-db-adapter-cosmos"
+  },
+  "homepage": "https://github.com/moleculerjs/moleculer-db/tree/master/packages/moleculer-db-adapter-cosmos#readme",
+  "author": "MoleculerJS",
+  "license": "MIT",
+  "peerDependencies": {
+    "moleculer": "^0.12.0 || ^0.13.0 || ^0.14.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@zeit/cosmosdb-server": "^0.3.1",
+    "benchmarkify": "^2.1.2",
+    "coveralls": "^3.0.6",
+    "jest": "^24.9.0",
+    "jest-cli": "^24.9.0",
+    "moleculer": "^0.13.11",
+    "moleculer-db": "^0.8.2",
+    "nodemon": "^1.19.3",
+    "npm-check": "^5.9.0",
+    "prettier": "^1.18.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/services/"
+    ]
+  },
+  "engines": {
+    "node": ">= 8.x.x"
+  },
+  "dependencies": {
+    "@azure/cosmos": "^3.3.3"
+  }
+}
