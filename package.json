@@ -1,6 +1,6 @@
 {
   "name": "moleculer-db-adapter-cosmos",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Azure CosmosDB SQL native adapter for Moleculer DB service.",
   "main": "index.js",
   "scripts": {
@@ -32,17 +32,17 @@
     "moleculer": "^0.12.0 || ^0.13.0 || ^0.14.0"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^24.0.25",
     "@zeit/cosmosdb-server": "^0.3.1",
     "benchmarkify": "^2.1.2",
-    "coveralls": "^3.0.6",
+    "coveralls": "^3.0.9",
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
-    "moleculer": "^0.13.11",
-    "moleculer-db": "^0.8.2",
-    "nodemon": "^1.19.3",
+    "moleculer": "^0.13.12",
+    "moleculer-db": "^0.8.4",
+    "nodemon": "^1.19.4",
     "npm-check": "^5.9.0",
-    "prettier": "^1.18.2"
+    "prettier": "^1.19.1"
   },
   "jest": {
     "testEnvironment": "node",
@@ -55,6 +55,6 @@
     "node": ">= 8.x.x"
   },
   "dependencies": {
-    "@azure/cosmos": "^3.3.3"
+    "@azure/cosmos": "^3.5.2"
   }
 }
